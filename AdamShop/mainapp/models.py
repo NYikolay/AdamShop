@@ -39,13 +39,16 @@ class ProductCategory(models.Model):
 
 class ProductImagesSet(models.Model):
     image = models.ImageField(default='no_image.jpg')
+    product = models.ForeignKey('Product', on_delete=models.CASCADE, verbose_name='Product')
 
 
 class Product(PolymorphicModel):
     name = models.CharField(max_length=255, verbose_name='Product Name')
+    type = models.CharField(max_length=56, verbose_name='Type')
+    market_launch_date = models.CharField(max_length=15, verbose_name='Market launch date')
     slug = models.SlugField('Product slug')
     category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, verbose_name='Product category')
-    image = models.ForeignKey(ProductImagesSet, on_delete=models.CASCADE, verbose_name='Product image')
+    tag = models.ForeignKey(ProductTag, on_delete=models.PROTECT, verbose_name='Tag')
     product_code = models.CharField(max_length=255, verbose_name='Product code')
     description = models.TextField(max_length=600)
     price = models.FloatField('Product price')
@@ -56,8 +59,6 @@ class Product(PolymorphicModel):
 
 
 class SmartSpeaker(Product):
-    market_launch_date = models.CharField(max_length=15, verbose_name='Market launch date')
-    type = models.CharField(max_length=56, verbose_name='Type')
     nutrition = models.CharField(max_length=56, verbose_name='Nutrition')
     memory_card_support = models.BooleanField()
     number_of_speakers = models.CharField(max_length=25, verbose_name='Number of speakers')
@@ -72,6 +73,19 @@ class SmartSpeaker(Product):
     depth = models.PositiveIntegerField(verbose_name='depth')
     weight = models.FloatField(verbose_name='weight')
     equipment = models.CharField(max_length=256, verbose_name='Equipment')
+
+
+class SmartPhone(Product):
+    screen_technology = models.CharField(max_length=65, verbose_name='Screen technology')
+    operating_system = models.CharField(max_length=65, verbose_name='Operating sistem')
+    os_version = models.CharField(max_length=65, verbose_name='OS version')
+    screen_size = models.FloatField(verbose_name='Screen Size')
+    screen_resolution = models.CharField(max_length=65, verbose_name='Screen resolution')
+    ram = models.PositiveIntegerField()
+    built_in_memory = models.PositiveIntegerField()
+    cpu = models.CharField(max_length=255, verbose_name='CPU')
+    num_of_cores = models.PositiveIntegerField()
+
 
 
 
