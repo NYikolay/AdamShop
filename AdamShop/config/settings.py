@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'polymorphic',
+
     'accounts',
     'mainapp',
 ]
@@ -59,7 +61,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             BASE_DIR / 'templates',
-        ],
+            ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
