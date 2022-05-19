@@ -17,11 +17,13 @@ class ModelProductChildAdmin(PolymorphicChildModelAdmin):
 @admin.register(SmartSpeaker)
 class SmartSpeakerAdmin(ModelProductChildAdmin):
     base_model = SmartSpeaker
+    inlines = (InlineProductImagesSet,)
 
 
 @admin.register(SmartPhone)
 class SmartPhoneAdmin(ModelProductChildAdmin):
     base_model = SmartPhone
+    inlines = (InlineProductImagesSet,)
 
 
 @admin.register(Product)
@@ -29,7 +31,6 @@ class ModelProductParentAdmin(PolymorphicParentModelAdmin):
     base_model = Product
     child_models = (SmartSpeaker, SmartPhone)
     list_filter = (PolymorphicChildModelFilter, )
-    inlines = [InlineProductImagesSet, ]
 
 
 admin.site.register(ProductTag)
