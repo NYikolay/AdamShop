@@ -37,6 +37,8 @@ admin.site.register(ProductTag)
 admin.site.register(ProductReview)
 admin.site.register(ProductCategory)
 admin.site.register(ProductImagesSet)
+admin.site.register(Brand)
+admin.site.register(ProductOnSale)
 
 
 

@@ -5,10 +5,19 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView, D
 
 from accounts.models import User
 from accounts.forms import UserChangeForm
+from mainapp.models import Product, ProductImagesSet
 
 
-def index(request):
-    return render(request, 'mainapp/index.html', context={})
+class IndexPage(ListView):
+    model = Product
+    template_name = 'mainapp/index.html'
+
+    # def get_context_data(self, *, object_list=None, **kwargs):
+    #     kwargs = super(IndexPage, self).get_context_data(**kwargs)
+    #     kwargs.update({
+    #         'image_set': ProductImagesSet.objects.all(),
+    #     })
+    #     return kwargs
 
 
 class AccountPage(DetailView):
