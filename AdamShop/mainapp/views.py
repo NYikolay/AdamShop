@@ -5,7 +5,7 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView, D
 
 from accounts.models import User
 from accounts.forms import UserChangeForm
-from mainapp.models import Product, ProductImagesSet
+from mainapp.models import Product, ProductImagesSet, WishList, CartItem
 
 
 class IndexPage(ListView):
@@ -33,5 +33,19 @@ class AccountDetailsUpdate(UpdateView):
     def get_success_url(self):
         pk = self.kwargs['pk']
         return reverse('account_details', kwargs={'pk': pk})
+
+
+class DeleteWish(DeleteView):
+    model = WishList
+    template_name = 'mainapp/delete_wish.html'
+    success_url = '/'
+
+
+class DeleteCartItem(DeleteView):
+    model = CartItem
+    template_name = 'mainapp/delete_purchase.html'
+    success_url = '/'
+
+
 
 

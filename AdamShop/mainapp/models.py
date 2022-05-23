@@ -5,15 +5,18 @@ from polymorphic.models import PolymorphicModel
 from accounts.models import User
 
 
-class Purchase(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='User')
-    product = models.ForeignKey('Product', on_delete=models.CASCADE, verbose_name='Product')
+class CartItem(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='cart_items', verbose_name='User')
+    product = models.ForeignKey('Product',
+                                on_delete=models.CASCADE,
+                                related_name='cart_product',
+                                verbose_name='Product')
     quantity_of_products = models.PositiveSmallIntegerField(default=1, verbose_name='Quantity of products')
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'Purchase'
-        verbose_name_plural = 'Purchases'
+        verbose_name = 'CartItem'
+        verbose_name_plural = 'CartItems'
         ordering = ['-created_at']
 
     def __str__(self):
