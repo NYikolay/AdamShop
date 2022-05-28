@@ -131,12 +131,16 @@
                     <!-- 1st tab start -->
                     <div class="tab-pane fade show active" id="newarrivals">
                         <div class="row mb-n-30px">
-                            {% for product in object_list %}
+                            {% for product in products %}
                             <div class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-xs-6 mb-30px">
                                 <!-- Single Prodect -->
                                 <div class="product">
                                             <span class="badges">
+                                                {% if product.on_sale %}
+                                                <span class="sale">Sale</span>
+                                                {% else %}
                                                 <span class="new">New</span>
+                                                {% endif %}
                                             </span>
                                     <div class="thumb">
                                         <a href="single-product.html" class="image">
@@ -155,17 +159,34 @@
                                         </a>
                                         </h5>
                                         <span class="price">
-                                                    <span class="new">${{ product.price }}</span>
+                                                    <span class="new">$
+                                                        {% if product.on_sale %}
+                                                        <del>{{ product.price }}</del> - <span>${{ product.get_discount_price|floatformat:2 }}</span>
+                                                        {% else %}
+                                                        {{ product.price }}
+                                                        {% endif %}
+                                                    </span>
                                                 </span>
                                     </div>
                                     <div class="actions">
-                                        <button title="Add To Cart" class="action add-to-cart" data-bs-toggle="modal" data-bs-target="#exampleModal-Cart"><i
-                                                class="pe-7s-shopbag"></i></button>
-                                        <button class="action wishlist" title="Wishlist" data-bs-toggle="modal" data-bs-target="#exampleModal-Wishlist"><i
-                                                class="pe-7s-like"></i></button>
-                                        <button class="action quickview" data-link-action="quickview" title="Quick view" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="pe-7s-look"></i></button>
-                                        <button class="action compare" title="Compare" data-bs-toggle="modal" data-bs-target="#exampleModal-Compare"><i
-                                                class="pe-7s-refresh-2"></i></button>
+                                        <form action="{% url 'create_cart_item' %}" method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="quantity_of_products" value="1">
+                                            <input type="hidden" name="product_id" value="{{ product.id }}">
+                                            <button type="submit" title="Add To Cart" class="action add-to-cart" data-bs-toggle="modal" data-bs-target="#exampleModal-Cart"><i
+                                                    class="pe-7s-shopbag"></i></button>
+                                        </form>
+                                        <form action="">
+                                            <button class="action wishlist" title="Wishlist" data-bs-toggle="modal" data-bs-target="#exampleModal-Wishlist"><i
+                                                    class="pe-7s-like"></i></button>
+                                        </form>
+                                        <form action="">
+                                            <button class="action quickview" data-link-action="quickview" title="Quick view" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="pe-7s-look"></i></button>
+                                        </form>
+                                        <form action="">
+                                            <button class="action compare" title="Compare" data-bs-toggle="modal" data-bs-target="#exampleModal-Compare"><i
+                                                    class="pe-7s-refresh-2"></i></button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -176,13 +197,17 @@
                     <!-- 2nd tab start -->
                     <div class="tab-pane fade" id="toprated">
                         <div class="row">
-                            {% for product in object_list %}
+                            {% for product in products %}
                             {% if product.product_rating >= 4 %}
                             <div class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-xs-6 mb-30px">
                                 <!-- Single Prodect -->
                                 <div class="product">
                                             <span class="badges">
+                                                {% if product.on_sale %}
+                                                <span class="sale">Sale</span>
+                                                {% else %}
                                                 <span class="new">New</span>
+                                                {% endif %}
                                             </span>
                                     <div class="thumb">
                                         <a href="single-product.html" class="image">
@@ -201,7 +226,13 @@
                                         </a>
                                         </h5>
                                         <span class="price">
-                                                    <span class="new">${{ product.price }}</span>
+                                                    <span class="new">$
+                                                        {% if product.on_sale %}
+                                                        <del>{{ product.price }}</del> - <span>${{ product.get_discount_price|floatformat:2 }}</span>
+                                                        {% else %}
+                                                        {{ product.price }}
+                                                        {% endif %}
+                                                    </span>
                                                 </span>
                                     </div>
                                     <div class="actions">
@@ -224,12 +255,16 @@
                     <!-- 3rd tab start -->
                     <div class="tab-pane fade" id="featured">
                         <div class="row">
-                            {% for product in object_list %}
+                            {% for product in products %}
                             <div class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-xs-6 mb-30px">
                                 <!-- Single Prodect -->
                                 <div class="product">
                                             <span class="badges">
+                                                {% if product.on_sale %}
+                                                <span class="sale">Sale</span>
+                                                {% else %}
                                                 <span class="new">New</span>
+                                                {% endif %}
                                             </span>
                                     <div class="thumb">
                                         <a href="single-product.html" class="image">
@@ -247,7 +282,13 @@
                                         </a>
                                         </h5>
                                         <span class="price">
-                                                    <span class="new">${{ product.price }}</span>
+                                                    <span class="new">$
+                                                        {% if product.on_sale %}
+                                                        <del>{{ product.price }}</del> - <span>${{ product.get_discount_price|floatformat:2 }}</span>
+                                                        {% else %}
+                                                        {{ product.price }}
+                                                        {% endif %}
+                                                    </span>
                                                 </span>
                                     </div>
                                     <div class="actions">
@@ -296,43 +337,57 @@
         </div>
         <div class="row">
             <div class="col-xl-6 col-lg-6 mb-md-35px mb-lm-35px">
+                {% for single_product in single_product_on_sale %}
                 <div class="single-feature-content">
+                    {% for img in single_product.images.all %}
+                    {% if img.main_img %}
                     <div class="feature-image">
                         <img src="{% static 'images/feature-image/1.webp' %}" alt="">
                     </div>
+                    {% endif %}
+                    {% endfor %}
                     <div class="top-content">
-                        <h4 class="title"><a href="single-product.html">Bluetooth Headphone </a></h4>
+                        <h4 class="title"><a href="single-product.html">{{ single_product.name }}</a></h4>
                         <span class="price">
-                            <span class="old"><del>$48.50</del></span>
-                                <span class="new">$38.50</span>
+                            <span class="old"><del>${{ single_product.price }}</del></span>
+                                <span class="new">${{ single_product.get_discount_price|floatformat:2 }}</span>
                                 </span>
                     </div>
                     <div class="bottom-content">
-                        <div class="deal-timing">
-                            <div data-countdown="2021/09/15"></div>
-                        </div>
+                        <h2>End in: {{ single_product.discount_time }}</h2>
                         <a href="single-product-variable.html" class="btn btn-primary  m-auto"> Shop
                             Now </a>
                     </div>
                 </div>
+                {% endfor %}
             </div>
             <div class="col-xl-6 col-lg-6">
-                <div class="feature-right-content">
+                {% for product_on_sale in products_on_sale %}
+                <div class="feature-right-content mt-4">
                     <div class="image-side">
-                        <img src="{% static 'images/feature-image/2.webp' %}" alt="">
-                        <button title="Add To Cart" class="action add-to-cart" data-bs-toggle="modal" data-bs-target="#exampleModal-Cart"><i
-                                class="pe-7s-shopbag"></i></button>
+                        {% for img in product_on_sale.images.all %}
+                        {% if img.main_img %}
+                        <img src="{{ img.image.url }}" alt="">
+                        <form action="{% url 'create_cart_item' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="quantity_of_products" value="1">
+                            <input type="hidden" name="product_id" value="{{ product_on_sale.id }}">
+                            <button title="Add To Cart" class="action add-to-cart" data-bs-toggle="modal" data-bs-target="#exampleModal-Cart"><i
+                                    class="pe-7s-shopbag"></i></button>
+                        </form>
+                        {% endif %}
+                        {% endfor %}
                     </div>
                     <div class="content-side">
                         <div class="deal-timing">
-                            <span>End In:</span>
-                            <div data-countdown="2021/09/15"></div>
+                            <span>End In: </span>
+                            {{ product_on_sale.discount_time|date:"M d, Y" }}
                         </div>
                         <div class="prize-content">
-                            <h5 class="title"><a href="single-product.html">Ladies Smart Watch</a></h5>
+                            <h5 class="title"><a href="single-product.html">{{ product_on_sale.name }}</a></h5>
                             <span class="price">
-                            <span class="old">$48.50</span>
-                                    <span class="new">$38.50</span>
+                            <span class="old">${{ product_on_sale.price }}</span>
+                                    <span class="new">${{ product_on_sale.get_discount_price|floatformat:2 }}</span>
                                     </span>
                         </div>
                         <div class="product-feature">
@@ -345,34 +400,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="feature-right-content mt-30px">
-                    <div class="image-side">
-                        <img src="{% static 'images/feature-image/3.webp' %}" alt="">
-                        <button title="Add To Cart" class="action add-to-cart" data-bs-toggle="modal" data-bs-target="#exampleModal-Cart"><i
-                                class="pe-7s-shopbag"></i></button>
-                    </div>
-                    <div class="content-side">
-                        <div class="deal-timing">
-                            <span>End In:</span>
-                            <div data-countdown="2021/09/15"></div>
-                        </div>
-                        <div class="prize-content">
-                            <h5 class="title"><a href="single-product.html">Ladies Smart Watch</a></h5>
-                            <span class="price">
-                            <span class="old">$48.50</span>
-                                    <span class="new">$38.50</span>
-                                    </span>
-                        </div>
-                        <div class="product-feature">
-                            <ul>
-                                <li>Predecessor : <span>None.</span></li>
-                                <li>Support Type : <span>Neutral.</span></li>
-                                <li>Cushioning : <span>High Energizing.</span></li>
-                                <li>Total Weight : <span> 300gm</span></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
         </div>
     </div>

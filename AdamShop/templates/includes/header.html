@@ -51,7 +51,7 @@
                     <!-- Single Wedge End -->
                     <a href="#offcanvas-cart" class="header-action-btn header-action-btn-cart offcanvas-toggle pr-0">
                         <i class="pe-7s-shopbag"></i>
-                        <span class="header-action-num">{{ user.cart_items.count }}</span>
+                        <span class="header-action-num">{{ user.cart_item.count }}</span>
                         <!-- <span class="cart-amount">€30.00</span> -->
                     </a>
                     <a href="#offcanvas-mobile-menu" class="header-action-btn header-action-btn-menu offcanvas-toggle d-lg-none">
@@ -282,13 +282,19 @@
         </div>
         <div class="body customScroll">
             <ul class="minicart-product-list">
-                {% for cart_item in user.cart_items.all %}
+                {% for cart_item in user.cart_item.all %}
                 <li>
                     <a href="single-product.html" class="image"><img src="{{ cart_item.product.images.first.image.url }}" alt="Cart product Image"></a>
                     <div class="content">
                         <a href="single-product.html" class="title">{{ cart_item.product.name }}</a>
-                        <span class="quantity-price">{{ cart_item.quantity_of_products }} x <span class="amount">${{ cart_item.product.price }}</span></span>
-                        <form action="{% url 'delete_cartitem' cart_item.pk %}" method="post">
+                        <span class="quantity-price">{{ cart_item.quantity_of_products }} x <span class="amount">$
+                            {% if cart_item.product.on_sale %}
+                                {{ cart_item.product.get_discount_price|floatformat:2 }}
+                            {% else %}
+                                {{ cart_item.product.price }}
+                            {% endif %}
+                        </span></span>
+                        <form action="{% url 'delete_cart_item' cart_item.pk %}" method="post">
                             {% csrf_token %}
                             <button type="submit" class="remove" value="delete">×</button>
                         </form>

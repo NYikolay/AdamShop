@@ -38,7 +38,6 @@ admin.site.register(ProductReview)
 admin.site.register(ProductCategory)
 admin.site.register(ProductImagesSet)
 admin.site.register(Brand)
-admin.site.register(ProductOnSale)
 admin.site.register(CartItem)
 admin.site.register(WishList)
 

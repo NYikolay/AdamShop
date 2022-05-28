@@ -6,7 +6,7 @@ from accounts.models import User
 
 
 class CartItem(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='cart_items', verbose_name='User')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='cart_item', verbose_name='User')
     product = models.ForeignKey('Product',
                                 on_delete=models.CASCADE,
                                 related_name='cart_product',
@@ -94,6 +94,16 @@ class Product(PolymorphicModel):
     width = models.PositiveIntegerField(null=True, blank=True, verbose_name='width')
     depth = models.PositiveIntegerField(null=True, blank=True, verbose_name='depth')
     weight = models.FloatField(null=True, blank=True, verbose_name='weight')
+    on_sale = models.BooleanField(null=True, blank=True, verbose_name='Product on sale')
+    discount_percent = models.FloatField(null=True, blank=True, verbose_name='Percent of discount')
+    discount_time = models.DateTimeField(null=True, blank=True, verbose_name='Discount end in')
+
+    def get_discount_price(self):
+        if self.on_sale and self.discount_percent:
+            discount_price = (self.discount_percent / 100) * self.price
+            return self.price - discount_price
+        else:
+            return 'There is no discount'
 
     def __str__(self):
         return self.name
@@ -126,13 +136,6 @@ class SmartPhone(Product):
     built_in_memory = models.PositiveIntegerField()
     cpu = models.CharField(max_length=255, verbose_name='CPU')
     num_of_cores = models.PositiveIntegerField()
-
-
-class ProductOnSale(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_sale', verbose_name='Product')
-    discounted_price = models.FloatField()
-    sale_time = models.DateTimeField()
-    created_at = models.DateTimeField(auto_now_add=True)
 
 
 class ProductReview(models.Model):
