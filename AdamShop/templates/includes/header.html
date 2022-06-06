@@ -51,7 +51,13 @@
                     <!-- Single Wedge End -->
                     <a href="#offcanvas-cart" class="header-action-btn header-action-btn-cart offcanvas-toggle pr-0">
                         <i class="pe-7s-shopbag"></i>
-                        <span class="header-action-num">{{ user.cart_item.count }}</span>
+                        <span class="header-action-num">
+                            {% if user.cart_item.count %}
+                            {{ user.cart_item.count }}
+                            {% else %}
+                            0
+                            {% endif %}
+                        </span>
                         <!-- <span class="cart-amount">€30.00</span> -->
                     </a>
                     <a href="#offcanvas-mobile-menu" class="header-action-btn header-action-btn-menu offcanvas-toggle d-lg-none">
@@ -255,7 +261,13 @@
                     <a href="single-product.html" class="image"><img src="{{ wish_product.product.images.first.image.url }}" alt="Cart product Image"></a>
                     <div class="content">
                         <a href="single-product.html" class="title">{{ wish_product.product.name }}</a>
-                        <span class="quantity-price">{{ wish_product.quantity_of_products }} x <span class="amount">${{ wish_product.product.price }}</span></span>
+                        <span class="quantity-price">{{ cart_item.quantity_of_products }} x <span class="amount">$
+                            {% if wish_product.product.on_sale %}
+                                <del>{{ wish_product.product.price }}</del> - <span>${{ wish_product.product.get_discount_price|floatformat:2 }}</span>
+                            {% else %}
+                                {{ wish_product.product.price }}
+                            {% endif %}
+                        </span></span>
                         <form action="{% url 'delete_wish' wish_product.pk %}" method="post">
                             {% csrf_token %}
                             <button type="submit" class="remove" value="delete">×</button>
@@ -289,7 +301,7 @@
                         <a href="single-product.html" class="title">{{ cart_item.product.name }}</a>
                         <span class="quantity-price">{{ cart_item.quantity_of_products }} x <span class="amount">$
                             {% if cart_item.product.on_sale %}
-                                {{ cart_item.product.get_discount_price|floatformat:2 }}
+                                <del>{{ cart_item.product.price }}</del> - <span>${{ cart_item.product.get_discount_price|floatformat:2 }}</span>
                             {% else %}
                                 {{ cart_item.product.price }}
                             {% endif %}

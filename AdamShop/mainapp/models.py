@@ -1,3 +1,6 @@
+from datetime import datetime, timedelta
+import pytz
+
 from django.db import models
 
 from polymorphic.models import PolymorphicModel
@@ -80,10 +83,10 @@ class Brand(models.Model):
 
 class Product(PolymorphicModel):
     name = models.CharField(max_length=255, verbose_name='Product Name')
-    brand = models.ForeignKey(Brand, on_delete=models.PROTECT, verbose_name='Product Brand')
+    brand = models.ForeignKey(Brand, on_delete=models.PROTECT, related_name='brands', verbose_name='Product Brand')
     market_launch_date = models.CharField(max_length=15, verbose_name='Market launch date')
     slug = models.SlugField('Product slug')
-    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, verbose_name='Product category')
+    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, related_name='categories', verbose_name='Product category')
     tag = models.ManyToManyField(ProductTag, verbose_name='Tag')
     description = models.TextField(max_length=600, verbose_name='Product description')
     price = models.FloatField('Product price')
@@ -98,8 +101,16 @@ class Product(PolymorphicModel):
     discount_percent = models.FloatField(null=True, blank=True, verbose_name='Percent of discount')
     discount_time = models.DateTimeField(null=True, blank=True, verbose_name='Discount end in')
 
+    # Метод для определения действительна ли скидка, если нет - меняет значение on_sale на False,
+    # в противном случае рассчитывает сумму скидки с учетом процента
     def get_discount_price(self):
-        if self.on_sale and self.discount_percent:
+        utc = pytz.UTC
+        now = utc.localize(datetime.now()) - timedelta(hours=3)
+        disc_time = self.discount_time
+        if now > disc_time:
+            self.on_sale = False
+            self.save()
+        elif self.on_sale and self.discount_percent:
             discount_price = (self.discount_percent / 100) * self.price
             return self.price - discount_price
         else:
