@@ -7323,13 +7323,15 @@ body.offcanvas-open {
   list-style: outside none none;
   margin: 0 0 13px;
   display: block;
+  border-bottom: 1px solid gray;
+  max-width: 300px;
+
 }
 .description-review-bottom .product-anotherinfo-wrapper li span {
   color: #525252;
   display: inline-block;
   font-weight: 500;
-  margin: 0 26px 0 0;
-  min-width: 85px;
+  margin: 0 5px 0 0;
 }
 .description-review-bottom .single-review {
   display: -webkit-box;

@@ -116,6 +116,10 @@ class Product(PolymorphicModel):
         else:
             return 'There is no discount'
 
+    def get_rating_stars(self):
+        stars_list = [i for i in range(1, int(self.product_rating) + 1)]
+        return stars_list
+
     def __str__(self):
         return self.name
 
@@ -151,7 +155,7 @@ class SmartPhone(Product):
 
 class ProductReview(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Review Creator')
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Product')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews', verbose_name='Product')
     rating = models.IntegerField()
     body = models.TextField(max_length=700, verbose_name='Product review text')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Time of creation review')

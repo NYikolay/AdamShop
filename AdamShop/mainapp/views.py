@@ -8,7 +8,7 @@ from django.views.generic import CreateView, UpdateView, DeleteView, DetailView,
 from accounts.models import User
 from accounts.forms import UserChangeForm
 from mainapp.forms import CartItemForm, WishItemForm
-from mainapp.models import Product, ProductImagesSet, WishList, CartItem, ProductCategory, Brand
+from mainapp.models import Product, ProductImagesSet, WishList, CartItem, ProductCategory, Brand, ProductReview
 
 
 class IndexPage(View):
@@ -26,7 +26,7 @@ class IndexPage(View):
 
 class EmptyPage(View):
     def get(self, request):
-        return render(request, 'mainapp/404_page.html', context={})
+        return render(request, '404_page.html')
 
 
 class DeleteCartItem(LoginRequiredMixin, DeleteView):
@@ -127,6 +127,26 @@ class ProductsPage(View):
         except:
             return redirect('404_page')
         return render(request, self.template, context)
+
+
+class SingleProductPage(View):
+    template = 'mainapp/single_product_page.html'
+
+    def get(self, request, *args, **kwargs):
+        try:
+            pk = kwargs.get('pk', None)
+        except:
+            return redirect('404_page')
+        try:
+            product = Product.objects.get(pk=pk)
+        except Product.DoesNotExist:
+            return redirect('404_page')
+        context = {
+            'product': product,
+        }
+        return render(request, self.template, context)
+
+
 
 
 

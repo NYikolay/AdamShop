@@ -13,7 +13,8 @@ from mainapp.views import \
     CartItemUpdate, \
     CreateWishItem, \
     ProductsPage, \
-    EmptyPage
+    EmptyPage, \
+    SingleProductPage
 
 urlpatterns = [
     url('', IndexPage.as_view(), name='index'),
@@ -26,6 +27,7 @@ urlpatterns = [
     url('create_cart_item/', CreateCartItem.as_view(), name='create_cart_item'),
     url('cart_item_update/<int:pk>/', CartItemUpdate.as_view(), name='cart_item_update'),
     url('products_page/', ProductsPage.as_view(), name='products_page'),
+    url('product/<int:pk>', SingleProductPage.as_view(), name='single_product_page'),
     url('change_password/',
         PasswordChangeView.as_view(
             template_name='mainapp/change_password.html',

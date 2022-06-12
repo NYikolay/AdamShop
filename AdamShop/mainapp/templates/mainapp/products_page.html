@@ -83,7 +83,7 @@
                                                             {% endif %}
                                                         </span>
                                                 <div class="thumb">
-                                                    <a href="single-product.html" class="image">
+                                                    <a href="{% url 'single_product_page' product.pk %}" class="image">
                                                         {% for img in product.images.all %}
                                                         {% if img.main_img %}
                                                         <img src="{{ img.image.url }}" alt="Product" />
@@ -95,7 +95,7 @@
                                                 </div>
                                                 <div class="content">
                                                     <span class="category"><a href="#">{{ product.category }}</a></span>
-                                                    <h5 class="title"><a href="single-product.html">{{ product.name }}
+                                                    <h5 class="title"><a href="{% url 'single_product_page' product.pk %}">{{ product.name }}
                                                     </a>
                                                     </h5>
                                                     <span class="price">
@@ -250,7 +250,7 @@
                         <div class="sidebar-widget-category">
                             <ul>
                                 <li><a href="#" class="selected m-0"> All
-                                    <span>(65)</span> </a></li>
+                                    <span>({{ all_products.count }})</span> </a></li>
                                 {% for category in categories %}
                                 <li><a href="#" class=""> {{ category.name }}
                                     <span>({{ category.categories.count }})</span> </a></li>

@@ -50,6 +50,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     city = models.CharField(max_length=55, blank=True, null=True, verbose_name='City')
     state = models.CharField(max_length=55, blank=True, null=True, verbose_name='State')
     zip_code = models.IntegerField('Zip code', null=True, blank=True)
+    image = models.ImageField(default='no_image.jpg', null=True, blank=True, verbose_name='Profile Photo')
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
