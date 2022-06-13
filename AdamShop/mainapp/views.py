@@ -1,14 +1,21 @@
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.shortcuts import render, redirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.core.paginator import Paginator
 
 from django.views.generic import CreateView, UpdateView, DeleteView, DetailView, View
 
 from accounts.models import User
 from accounts.forms import UserChangeForm
-from mainapp.forms import CartItemForm, WishItemForm
-from mainapp.models import Product, ProductImagesSet, WishList, CartItem, ProductCategory, Brand, ProductReview
+from mainapp.forms import CartItemForm, WishItemForm, ReviewForm, ReplyOnReviewForm
+from mainapp.models import Product, \
+    ProductImagesSet, \
+    WishList, \
+    CartItem, \
+    ProductCategory, \
+    Brand, \
+    ProductReview, \
+    ProductReviewReply
 
 
 class IndexPage(View):
@@ -146,6 +153,62 @@ class SingleProductPage(View):
         }
         return render(request, self.template, context)
 
+
+class CreateReview(LoginRequiredMixin, View):
+    form_class = ReviewForm
+    login_url = 'login'
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(data=request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.user = request.user
+            review.product_id = request.POST.get('product_id')
+            review.rating = request.POST.get('rating_num')
+            review.body = request.POST.get('body')
+            review.save()
+            return redirect(request.META.get('HTTP_REFERER'))
+        else:
+            return redirect(request.META.get('HTTP_REFERER'))
+
+
+class DeleteReview(LoginRequiredMixin, DeleteView):
+    model = ProductReview
+    login_url = 'login'
+    template_name = 'mainapp/delete_review.html'
+
+    def get_success_url(self):
+        next_url = self.request.GET.get('next')
+
+        if next_url:
+            return next_url
+
+
+class CreateReplyOnReview(LoginRequiredMixin, View):
+    form_class = ReplyOnReviewForm
+    login_url = 'login'
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(data=request.POST)
+        if form.is_valid():
+            reply = form.save(commit=False)
+            reply.user = request.user
+            reply.review_id = request.POST.get('review_id')
+            reply.body = request.POST.get('body')
+            reply.save()
+            return redirect(request.META.get('HTTP_REFERER'))
+
+
+class DeleteReply(LoginRequiredMixin, DeleteView):
+    model = ProductReviewReply
+    login_url = 'login'
+    template_name = 'mainapp/delete_reply.html'
+
+    def get_success_url(self):
+        next_url = self.request.GET.get('next')
+
+        if next_url:
+            return next_url
 
 
 

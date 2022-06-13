@@ -154,11 +154,22 @@ class SmartPhone(Product):
 
 
 class ProductReview(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Review Creator')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_reviews', verbose_name='Review Creator')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews', verbose_name='Product')
     rating = models.IntegerField()
     body = models.TextField(max_length=700, verbose_name='Product review text')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Time of creation review')
+
+    def get_rating_stars(self):
+        stars_list = [i for i in range(1, int(self.rating) + 1)]
+        return stars_list
+
+
+class ProductReviewReply(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_reviews_reply', verbose_name='Reply Creator')
+    review = models.ForeignKey(ProductReview, on_delete=models.CASCADE, related_name='reviews_reply', verbose_name='Reply')
+    body = models.TextField(max_length=700, verbose_name='Reply review text')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Time of creation reply')
 
 
 class ProductImagesSet(models.Model):

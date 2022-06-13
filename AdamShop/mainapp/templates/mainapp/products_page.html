@@ -145,7 +145,7 @@
                                             <div class="col-md-5 col-lg-5 col-xl-4 mb-lm-30px">
                                                 <div class="product">
                                                     <div class="thumb">
-                                                        <a href="single-product.html" class="image">
+                                                        <a href="{% url 'single_product_page' product.pk %}" class="image">
                                                             {% for img in product.images.all %}
                                                             {% if img.main_img %}
                                                             <img src="{{ img.image.url }}" alt="Product" />
@@ -168,7 +168,7 @@
                                                 <div class="content-desc-wrap">
                                                     <div class="content">
                                                         <span class="category"><a href="#">{{ product.category }}</a></span>
-                                                        <h5 class="title"><a href="single-product.html">{{ product.name }}</a></h5>
+                                                        <h5 class="title"><a href="{% url 'single_product_page' product.pk %}">{{ product.name }}</a></h5>
                                                         <p>{{ product.description }}</p>
                                                     </div>
                                                     <div class="box-inner">
@@ -193,7 +193,7 @@
                                                             <form action="{% url 'create_wish_item' %}" method="post">
                                                                 {% csrf_token %}
                                                                 <input type="hidden" name="quantity_of_products" value="1">
-                                                                <input type="hidden", name="product_id" value="{{ product.id }}">
+                                                                <input type="hidden" name="product_id" value="{{ product.id }}">
                                                                 <button  type="submit" class="action wishlist" title="Wishlist" data-bs-toggle="modal" data-bs-target="#exampleModal-Wishlist"><i
                                                                         class="pe-7s-like"></i></button>
                                                             </form>

@@ -40,6 +40,7 @@ admin.site.register(ProductImagesSet)
 admin.site.register(Brand)
 admin.site.register(CartItem)
 admin.site.register(WishList)
+admin.site.register(ProductReviewReply)
 
 
 
