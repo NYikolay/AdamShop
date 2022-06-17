@@ -10,7 +10,6 @@ from mainapp.views import \
     DeleteWish, \
     DeleteCartItem, \
     CreateCartItem, \
-    CartItemUpdate, \
     CreateWishItem, \
     ProductsPage, \
     EmptyPage, \
@@ -29,7 +28,6 @@ urlpatterns = [
     url('create_wish_item/', CreateWishItem.as_view(), name='create_wish_item'),
     url('delete_purchase/<int:pk>', DeleteCartItem.as_view(), name='delete_cart_item'),
     url('create_cart_item/', CreateCartItem.as_view(), name='create_cart_item'),
-    url('cart_item_update/<int:pk>/', CartItemUpdate.as_view(), name='cart_item_update'),
     url('products_page/', ProductsPage.as_view(), name='products_page'),
     url('product/<int:pk>', SingleProductPage.as_view(), name='single_product_page'),
     url('create_review/', CreateReview.as_view(), name='create_review'),

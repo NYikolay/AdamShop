@@ -87,7 +87,8 @@
               <div class="cart-plus-minus">
                 <input class="cart-plus-minus-box" type="text" name="quantity_of_products" value="1" />
               </div>
-              <input type="hidden" name="product_id" value="{{ product.pk }}">
+              <input type="hidden" name="user" value="{{ user.id }}">
+              <input type="hidden" name="product" value="{{ product.pk }}">
               <div class="pro-details-cart">
                 <button class="add-cart"> Add To
                   Cart</button>
@@ -96,7 +97,8 @@
             <form action="{% url 'create_wish_item' %}" method="post">
               {% csrf_token %}
               <div class="pro-details-compare-wishlist pro-details-wishlist ">
-                <input type="hidden" name="product_id" value="{{ product.pk }}">
+                <input type="hidden" name="user" value="{{ user.id }}">
+                <input type="hidden" name="product" value="{{ product.id }}">
                 <input type="hidden" name="quantity_of_products" value="1">
                 <button type="submit"><i class="pe-7s-like"></i></button>
               </div>
@@ -198,7 +200,8 @@
                     <form action="{% url 'create_reply' %}" method="post">
                       {% csrf_token %}
                       <div class="reply-block d-flex flex-row">
-                        <input type="hidden" name="review_id" value="{{ review.pk }}">
+                        <input type="hidden" name="user" value="{{ user.id }}">
+                        <input type="hidden" name="review" value="{{ review.pk }}">
                         <input type="text" placeholder="write your message here" name="body">
                         <button type="submit">Reply</button>
                       </div>
@@ -238,11 +241,12 @@
                     <div class="ratting-form">
                       <form action="{% url 'create_review' %}" method="post">
                         {% csrf_token %}
-                        <input type="hidden" name="product_id" value="{{ product.pk }}">
+                        <input type="hidden" name="product" value="{{ product.pk }}">
+                        <input type="hidden" name="user" value="{{ user.id }}">
                         <div class="star-box">
                           <span>Your rating:</span>
                           <div class="rating-product">
-                            <input id="product_rating" maxlength="1" type="text" name='rating_num' value="1" placeholder="From 1 to 5"
+                            <input id="product_rating" maxlength="1" type="text" name='rating' value="1" placeholder="From 1 to 5"
                                    style="font-size: 15px;
                                      padding: 0;
                                      max-height: 20px;
@@ -266,9 +270,6 @@
                           <div class="col-md-12">
                             <div class="rating-form-style form-submit">
                               <textarea name="body" placeholder="Message"></textarea>
-                              {% if errors %}
-                              {{ error }}
-                              {% endif %}
                               <button class="btn btn-primary btn-hover-color-primary " type="submit" value="Submit">Submit</button>
                             </div>
                           </div>

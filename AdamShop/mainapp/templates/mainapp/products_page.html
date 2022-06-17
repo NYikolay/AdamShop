@@ -112,15 +112,17 @@
                                                 <div class="actions">
                                                     <form action="{% url 'create_cart_item' %}" method="post">
                                                         {% csrf_token %}
+                                                        <input type="hidden" name="user" value="{{ user.id }}">
                                                         <input type="hidden" name="quantity_of_products" value="1">
-                                                        <input type="hidden" name="product_id" value="{{ product.id }}">
+                                                        <input type="hidden" name="product" value="{{ product.id }}">
                                                         <button type="submit" title="Add To Cart" class="action add-to-cart" data-bs-toggle="modal" data-bs-target="#exampleModal-Cart"><i
                                                                 class="pe-7s-shopbag"></i></button>
                                                     </form>
                                                     <form action="{% url 'create_wish_item' %}" method="post">
                                                         {% csrf_token %}
+                                                        <input type="hidden" name="user" value="{{ user.id }}">
                                                         <input type="hidden" name="quantity_of_products" value="1">
-                                                        <input type="hidden", name="product_id" value="{{ product.id }}">
+                                                        <input type="hidden", name="product" value="{{ product.id }}">
                                                         <button  type="submit" class="action wishlist" title="Wishlist" data-bs-toggle="modal" data-bs-target="#exampleModal-Wishlist"><i
                                                                 class="pe-7s-like"></i></button>
                                                     </form>
@@ -185,15 +187,17 @@
                                                         <div class="actions">
                                                             <form action="{% url 'create_cart_item' %}" method="post">
                                                                 {% csrf_token %}
+                                                                <input type="hidden" name="user" value="{{ user.id }}">
                                                                 <input type="hidden" name="quantity_of_products" value="1">
-                                                                <input type="hidden" name="product_id" value="{{ product.id }}">
+                                                                <input type="hidden" name="product" value="{{ product.id }}">
                                                                 <button type="submit" title="Add To Cart" class="action add-to-cart" data-bs-toggle="modal" data-bs-target="#exampleModal-Cart"><i
                                                                         class="pe-7s-shopbag"></i></button>
                                                             </form>
                                                             <form action="{% url 'create_wish_item' %}" method="post">
                                                                 {% csrf_token %}
+                                                                <input type="hidden" name="user" value="{{ user.id }}">
                                                                 <input type="hidden" name="quantity_of_products" value="1">
-                                                                <input type="hidden" name="product_id" value="{{ product.id }}">
+                                                                <input type="hidden", name="product" value="{{ product.id }}">
                                                                 <button  type="submit" class="action wishlist" title="Wishlist" data-bs-toggle="modal" data-bs-target="#exampleModal-Wishlist"><i
                                                                         class="pe-7s-like"></i></button>
                                                             </form>

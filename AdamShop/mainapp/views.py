@@ -52,19 +52,11 @@ class CreateCartItem(LoginRequiredMixin, View):
         form = self.form_class(data=request.POST)
         if form.is_valid():
             cart_item = form.save(commit=False)
-            cart_item.user = request.user
-            cart_item.product_id = request.POST.get('product_id')
+            cart_item.user_id = request.POST.get('user')
+            cart_item.product_id = request.POST.get('product')
             cart_item.quantity_of_products = request.POST.get('quantity_of_products')
             cart_item.save()
             return redirect(request.META.get('HTTP_REFERER'))
-
-
-class CartItemUpdate(LoginRequiredMixin, UpdateView):
-    model = CartItem
-    fields = ('quantity_of_products',)
-    template_name = 'mainapp/cart_item_update.html'
-    success_url = '/'
-    login_url = 'login'
 
 
 class CreateWishItem(LoginRequiredMixin, View):
@@ -75,8 +67,8 @@ class CreateWishItem(LoginRequiredMixin, View):
         form = self.form_class(data=request.POST)
         if form.is_valid():
             wish_item = form.save(commit=False)
-            wish_item.user = request.user
-            wish_item.product_id = request.POST.get('product_id')
+            wish_item.user_id = request.POST.get('user')
+            wish_item.product_id = request.POST.get('product')
             wish_item.quantity_of_products = request.POST.get('quantity_of_products')
             wish_item.save()
             return redirect(request.META.get('HTTP_REFERER'))
@@ -162,9 +154,9 @@ class CreateReview(LoginRequiredMixin, View):
         form = self.form_class(data=request.POST)
         if form.is_valid():
             review = form.save(commit=False)
-            review.user = request.user
-            review.product_id = request.POST.get('product_id')
-            review.rating = request.POST.get('rating_num')
+            review.user_id = request.POST.get('user')
+            review.product_id = request.POST.get('product')
+            review.rating = request.POST.get('rating')
             review.body = request.POST.get('body')
             review.save()
             return redirect(request.META.get('HTTP_REFERER'))
@@ -192,8 +184,8 @@ class CreateReplyOnReview(LoginRequiredMixin, View):
         form = self.form_class(data=request.POST)
         if form.is_valid():
             reply = form.save(commit=False)
-            reply.user = request.user
-            reply.review_id = request.POST.get('review_id')
+            reply.user_id = request.POST.get('user')
+            reply.review_id = request.POST.get('review')
             reply.body = request.POST.get('body')
             reply.save()
             return redirect(request.META.get('HTTP_REFERER'))
@@ -209,6 +201,7 @@ class DeleteReply(LoginRequiredMixin, DeleteView):
 
         if next_url:
             return next_url
+
 
 
 
