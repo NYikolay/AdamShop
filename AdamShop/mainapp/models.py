@@ -86,7 +86,10 @@ class Product(PolymorphicModel):
     brand = models.ForeignKey(Brand, on_delete=models.PROTECT, related_name='brands', verbose_name='Product Brand')
     market_launch_date = models.CharField(max_length=15, verbose_name='Market launch date')
     slug = models.SlugField('Product slug')
-    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, related_name='categories', verbose_name='Product category')
+    category = models.ForeignKey(ProductCategory,
+                                 on_delete=models.CASCADE,
+                                 related_name='categories',
+                                 verbose_name='Product category')
     tag = models.ManyToManyField(ProductTag, verbose_name='Tag')
     description = models.TextField(max_length=600, verbose_name='Product description')
     price = models.FloatField('Product price')
@@ -100,6 +103,10 @@ class Product(PolymorphicModel):
     on_sale = models.BooleanField(null=True, blank=True, verbose_name='Product on sale')
     discount_percent = models.FloatField(null=True, blank=True, verbose_name='Percent of discount')
     discount_time = models.DateTimeField(null=True, blank=True, verbose_name='Discount end in')
+
+    class Meta:
+        verbose_name = 'Product'
+        verbose_name_plural = 'Products'
 
     # Метод для определения действительна ли скидка, если нет - меняет значение on_sale на False,
     # в противном случае рассчитывает сумму скидки с учетом процента
@@ -122,10 +129,6 @@ class Product(PolymorphicModel):
 
     def __str__(self):
         return self.name
-
-    class Meta:
-        verbose_name = 'Product'
-        verbose_name_plural = 'Products'
 
 
 class SmartSpeaker(Product):
@@ -160,26 +163,51 @@ class ProductReview(models.Model):
     body = models.TextField(max_length=700, verbose_name='Product review text')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Time of creation review')
 
+    class Meta:
+        verbose_name = 'Product review'
+        verbose_name_plural = 'Product reviews'
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f'Review from {self.user} to {self.product.name}'
+
     def get_rating_stars(self):
         stars_list = [i for i in range(1, int(self.rating) + 1)]
         return stars_list
 
 
 class ProductReviewReply(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_reviews_reply', verbose_name='Reply Creator')
-    review = models.ForeignKey(ProductReview, on_delete=models.CASCADE, related_name='reviews_reply', verbose_name='Reply')
+    user = models.ForeignKey(User,
+                             on_delete=models.CASCADE,
+                             related_name='user_reviews_reply',
+                             verbose_name='Reply Creator')
+    review = models.ForeignKey(ProductReview,
+                               on_delete=models.CASCADE,
+                               related_name='reviews_reply',
+                               verbose_name='Reply')
     body = models.TextField(max_length=700, verbose_name='Reply review text')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Time of creation reply')
+
+    class Meta:
+        verbose_name = 'Reply to review'
+        verbose_name_plural = 'Reply to reviews'
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f'Reply from {self.user} to {self.review.user}, product {self.review.product.name}'
 
 
 class ProductImagesSet(models.Model):
     image = models.ImageField(default='no_image.jpg')
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images', verbose_name='Product')
+    product = models.ForeignKey(Product,
+                                on_delete=models.CASCADE,
+                                related_name='images',
+                                verbose_name='Product')
     main_img = models.BooleanField(null=True, blank=True, verbose_name='Main image')
 
     class Meta:
-        verbose_name = 'ProductImagesSet'
-        verbose_name_plural = 'ProductImagesSets'
+        verbose_name = 'Product image'
+        verbose_name_plural = 'Product images set'
         ordering = ['product', ]
 
     def __str__(self):

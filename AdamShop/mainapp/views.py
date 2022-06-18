@@ -1,4 +1,6 @@
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
+from django.core.exceptions import ValidationError
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 from django.core.paginator import Paginator
@@ -20,7 +22,10 @@ from mainapp.models import Product, \
 
 class IndexPage(View):
     def get(self, request):
-        products = Product.objects.all()
+        try:
+            products = Product.objects.all()
+        except:
+            raise ValidationError('Can\'t products')
         single_product_on_sale = Product.objects.filter(on_sale=True)[:1]
         products_on_sale = Product.objects.filter(on_sale=True)[1:3]
         context = {
@@ -109,8 +114,11 @@ class ProductsPage(View):
     template = 'mainapp/products_page.html'
 
     def get(self, request):
-        brands = Brand.objects.all()
-        categories = ProductCategory.objects.all()
+        try:
+            brands = Brand.objects.all()
+            categories = ProductCategory.objects.all()
+        except:
+            raise ValidationError('Can\'t brands or categories [mainapp.views.ProductsPage]')
         products = Product.objects.all().order_by('-date_of_receipt')
         paginator = Paginator(products, 2)
         page = request.GET.get('page')

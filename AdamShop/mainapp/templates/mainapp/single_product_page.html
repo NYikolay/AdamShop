@@ -221,10 +221,12 @@
                           <div class="review-left">
                             <a>Replied to {{ reply.review.user.first_name }} {{ reply.review.user.last_name }}</a>
                           </div>
+                          {% if user == reply.user %}
                           <form action="{% url 'delete_reply' reply.pk %}?next={{ request.path }}" method="post">
                             {% csrf_token %}
                             <button type="submit" class="remove" value="delete">×</button>
                           </form>
+                          {% endfor %}
                         </div>
                         <div class="review-bottom">
                           <p>{{ reply.body }}</p>
