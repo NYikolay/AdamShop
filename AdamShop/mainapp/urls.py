@@ -17,7 +17,9 @@ from mainapp.views import \
     CreateReview, \
     CreateReplyOnReview, \
     DeleteReview, \
-    DeleteReply
+    DeleteReply, \
+    CartPage, \
+    CartItemUpdate
 
 urlpatterns = [
     url('', IndexPage.as_view(), name='index'),
@@ -34,6 +36,8 @@ urlpatterns = [
     url('delete_review/<int:pk>', DeleteReview.as_view(), name='delete_review'),
     url('create_reply_on_review/', CreateReplyOnReview.as_view(), name='create_reply'),
     url('delete_reply_on_review/<int:pk>', DeleteReply.as_view(), name='delete_reply'),
+    url('cart_page/', CartPage.as_view(), name='cart_page'),
+    url('update_cart/<int:pk>', CartItemUpdate.as_view(), name='update_cart'),
     url('change_password/',
         PasswordChangeView.as_view(
             template_name='mainapp/change_password.html',

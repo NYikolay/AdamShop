@@ -1,6 +1,6 @@
 from django import forms
 
-from mainapp.models import CartItem, WishList, ProductReview, ProductReviewReply
+from mainapp.models import CartItem, WishList, ProductReview, ProductReviewReply, Product
 
 
 class CartItemForm(forms.ModelForm):

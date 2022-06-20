@@ -44,8 +44,13 @@ class EmptyPage(View):
 class DeleteCartItem(LoginRequiredMixin, DeleteView):
     model = CartItem
     template_name = 'mainapp/delete_purchase.html'
-    success_url = '/'
     login_url = 'login'
+
+    def get_success_url(self):
+        next_url = self.request.META.get('HTTP_REFERER')
+
+        if next_url:
+            return next_url
 
 
 class CreateCartItem(LoginRequiredMixin, View):
@@ -211,6 +216,36 @@ class DeleteReply(LoginRequiredMixin, DeleteView):
             return next_url
 
 
+class CartPage(LoginRequiredMixin, View):
+    template = 'mainapp/cart_page.html'
+    login_url = 'login'
 
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        try:
+            cart_products = CartItem.objects.filter(user=user)
+        except:
+            raise ValueError('Oop\'s something went wrong')
+        cart_total = 0
+        for item in cart_products:
+            cart_total += item.get_subtotal_count()
+        context = {
+            'cart_products': cart_products,
+            'cart_total': cart_total,
+        }
+        return render(request, self.template, context)
+
+
+class CartItemUpdate(LoginRequiredMixin, View):
+    login_url = 'login'
+    form_class = CartItemForm
+
+    def post(self, request, *args, **kwargs):
+        cart_item = CartItem.objects.get(id=kwargs.get('pk', None))
+        form = self.form_class(data=request.POST)
+        if form.is_valid():
+            cart_item.quantity_of_products = request.POST.get('quantity_of_products')
+            cart_item.save()
+            return redirect(request.META.get('HTTP_REFERER'))
 
 

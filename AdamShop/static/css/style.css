@@ -7820,6 +7820,11 @@ body.offcanvas-open {
 .cart-main-area .table-content table tbody > tr td.product-remove a:hover {
   color: #266bf9;
 }
+
+.cart-main-area .table-content table tbody > tr td.product-remove button:hover {
+  color: #266bf9;
+}
+
 .cart-main-area .table-content table tbody > tr td.product-wishlist-cart > a {
   background-color: #266bf9;
   border-radius: 0px;

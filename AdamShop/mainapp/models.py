@@ -25,6 +25,14 @@ class CartItem(models.Model):
     def __str__(self):
         return f'Purchase from {self.user}, product name: {self.product}, quantity: {self.quantity_of_products}'
 
+    def get_subtotal_count(self):
+        product_price = 0
+        if self.product.on_sale:
+            product_price = self.product.get_discount_price()
+        else:
+            product_price = self.product.price
+        return self.quantity_of_products * product_price
+
 
 class WishList(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='wishlists', verbose_name='User')

@@ -226,7 +226,7 @@
                             {% csrf_token %}
                             <button type="submit" class="remove" value="delete">×</button>
                           </form>
-                          {% endfor %}
+                          {% endif %}
                         </div>
                         <div class="review-bottom">
                           <p>{{ reply.body }}</p>
